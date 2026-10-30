@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827"><title>LEVEL UP</title>
+<style>
+:root{--bg:#090909;--panel:#171512;--panel2:#292318;--line:#68542b;--text:#f7f1e3;--muted:#b8aa8c;--blue:#d7ad50;--purple:#a77b2e;--green:#c5a04b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#45371c 0,#090909 43%);color:var(--text);font:15px system-ui,Arial,sans-serif;min-height:100vh}
+.app{max-width:920px;margin:auto;padding:18px 14px 35px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}.brand{font-size:26px;font-weight:900;letter-spacing:1px}.brand span{color:#7ca8ff}.sub,.muted{color:var(--muted);font-size:12px}.avatar{border:1px solid var(--line);background:linear-gradient(145deg,#30496d,#17243a);border-radius:15px;padding:12px;font-size:24px;box-shadow:5px 6px 14px #0006}
+.card{background:linear-gradient(145deg,#282216,#11100d);border:1px solid #9b793766;border-radius:18px;padding:16px;box-shadow:7px 9px 20px #0005,inset 1px 1px 1px #ffffff12;margin-bottom:13px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:12px}.big{font-size:29px;font-weight:850}.muted{line-height:1.5}.progress{height:9px;background:#0a1424;border-radius:99px;overflow:hidden;margin-top:9px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));width:0%;border-radius:99px}
+nav{display:flex;gap:7px;overflow-x:auto;padding:5px 0 13px;scrollbar-width:thin}.nav{white-space:nowrap;border:1px solid var(--line);background:#17253a;color:var(--text);border-radius:12px;padding:10px 12px;font-size:12px}.nav.active{background:linear-gradient(120deg,#9a7129,#e3c16e);border-color:#f3d98c;color:#17120a}
+.page{display:none}.page.active{display:block}h2{font-size:20px;margin:5px 0 12px}h3{font-size:15px;margin:0 0 9px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.btn{border:0;border-radius:11px;background:linear-gradient(120deg,#8d6726,#e0bd69);color:#17120a;color:white;font-weight:750;padding:10px 13px;cursor:pointer}.btn.secondary{background:#302718;border:1px solid var(--line)}.btn.danger{background:#743b4a}.smallbtn{padding:7px 9px;font-size:12px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.weekday,.date{font-size:12px;text-align:center;padding:8px 2px}.weekday{color:var(--muted)}.date{background:#302718;border-radius:9px;border:1px solid #574629;color:white;cursor:pointer;min-height:38px}.date.selected{outline:2px solid #8cb2ff}.date.marked{background:#66501e;border-color:#e0bd69}
+.list{display:grid;gap:8px}.item{display:flex;gap:10px;align-items:center;padding:12px;background:#241f16;border:1px solid #59492d;border-radius:13px}.item .emoji{font-size:27px;width:40px;text-align:center}.item .details{flex:1;min-width:0}.item b{display:block;font-size:14px}.item small{color:var(--muted)}.item button{flex-shrink:0}
+input,select,textarea{width:100%;background:#0c1728;color:white;border:1px solid #465b77;border-radius:10px;padding:11px;font:inherit;margin:5px 0 10px}label{font-size:12px;color:var(--muted)}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{background:#292215;border:1px solid #6d572c;border-radius:13px;padding:13px}.stat strong{font-size:23px;display:block}.empty{color:var(--muted);font-size:13px;padding:10px}
+.modal{display:none;position:fixed;inset:0;background:#000b;align-items:center;justify-content:center;padding:16px;z-index:5}.modal.open{display:flex}.modalbox{width:min(430px,100%);background:#17253a;border:1px solid #536985;border-radius:17px;padding:17px}
+footer{text-align:center;color:var(--muted);font-size:11px;margin-top:22px}
+@media(min-width:700px){.grid2{grid-template-columns:repeat(3,minmax(0,1fr))}.app{padding-top:26px}}
+</style><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head>
+<body><main class="app">
+<header class="top"><div><div class="brand">LEVEL <span>UP</span></div><div class="sub">YOUR PERSONAL GROWTH SYSTEM</div></div><div class="avatar">🚀</div></header>
+<section class="card hero"><div><div class="sub">TODAY'S PROGRESS</div><div class="big" id="percent">0%</div><div class="muted" id="progressText">Start with one small win.</div><div class="progress"><i id="bar"></i></div></div><div style="font-size:45px">🏆</div></section>
+<nav id="nav">
+<button class="nav active" data-page="home">🏠 Home</button><button class="nav" data-page="fitness">💪 Fitness</button><button class="nav" data-page="boxing">🥊 Boxing</button><button class="nav" data-page="trading">📈 Trading</button><button class="nav" data-page="challenges">🎯 Challenges</button><button class="nav" data-page="stats">📊 Progress</button><button class="nav" data-page="settings">⚙️ Settings</button>
+</nav>
+<section class="page active" id="home">
+<div class="row"><h2>Monthly Calendar</h2><span class="muted" id="monthName"></span></div>
+<div class="card"><div class="calendar" id="calendar"></div></div>
+<div class="row"><h2>My Habits</h2><button class="btn smallbtn" id="addHabit">＋ Add habit</button></div>
+<div class="card"><p class="muted">Choose a date on the calendar, then tick the habits you complete.</p><div class="list" id="habits"></div></div>
+</section>
+<section class="page" id="fitness">
+<h2>💪 Beginner Fitness</h2><p class="muted">Gentle, equipment-free movement ideas. Begin comfortably, take rest days, and progress gradually.</p>
+<div class="card"><h3>Beginner movement library</h3><div class="list" id="fitnessList"></div><button class="btn" id="addFitness">＋ Add exercise</button></div>
+</section>
+<section class="page" id="boxing">
+<h2>🥊 Boxing Academy</h2><p class="muted">Learn movement and coordination. Practice slowly in a clear space, preferably with a qualified coach.</p>
+<div class="card"><div class="list" id="boxingList"></div><button class="btn" id="addBoxing">＋ Add lesson</button></div>
+</section>
+<section class="page" id="trading">
+<h2>📈 Trading Academy</h2><p class="muted">Education and simulated chart practice only. No real-money trading is needed to learn.</p>
+<div class="card"><div class="list" id="tradingList"></div><button class="btn" id="addTrading">＋ Add topic</button></div>
+</section>
+<section class="page" id="challenges">
+<h2>🎯 Daily Challenges</h2><p class="muted">Small, realistic challenges. Complete what fits your day.</p><div class="card"><div class="list" id="challengeList"></div><div class="progress"><i id="challengeBar"></i></div><p class="muted" id="challengeCount"></p></div>
+</section>
+<section class="page" id="stats">
+<h2>📊 Your Progress</h2><div class="grid2"><div class="stat"><span class="muted">Habits today</span><strong id="statHabits">0/0</strong></div><div class="stat"><span class="muted">Challenges</span><strong id="statChallenges">0/0</strong></div><div class="stat"><span class="muted">Habit days checked</span><strong id="statDays">0</strong></div></div><div class="card" style="margin-top:12px"><h3>Keep it steady</h3><p class="muted">Progress is about consistency, not perfection. Rest and recovery are part of a good routine.</p></div></section>
+<section class="page" id="settings">
+<h2>⚙️ Settings</h2><div class="card"><label for="username">Your display name</label><input id="username" placeholder="Your name"><label for="wake">Wake-up goal</label><input id="wake" type="time" value="05:30"><label for="theme">Theme</label><select id="theme"><option value="dark">3D Dark</option></select><button class="btn" id="saveSettings">Save settings</button></div>
+<div class="card"><h3>Data</h3><p class="muted">This demo saves your information in this browser on this device. Clearing browser data may erase it.</p><button class="btn secondary" id="exportData">Export my data</button> <button class="btn danger" id="reset">Reset app data</button></div></section>
+<footer>LEVEL UP • BUILD HABITS, NOT PRESSURE</footer>
+</main>
+<div class="modal" id="modal"><div class="modalbox"><h3 id="modalTitle">Add item</h3><label for="modalName">Name</label><input id="modalName" maxlength="60"><div class="row"><button class="btn" id="modalSave">Save</button><button class="btn secondary" id="modalCancel">Cancel</button></div></div></div>
+<script>
+const $=id=>document.getElementById(id),today=new Date();
+const keyDate=d=>`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+const defaults={
+habits:['Wake up on time','Study session','Read or learn English','Movement / exercise','Trading study','Skincare','Sleep routine'].map((name,i)=>({id:i+1,name,marks:{}})),
+fitness:[['🚶','Easy warm-up walk','A comfortable short walk'],['🧍','Chair sit-to-stand','Try a few controlled repetitions'],['🧱','Wall push-up','Gentle upper-body movement'],['🧘','Gentle stretching','Move within a comfortable range'],['🦶','Calf raises','Hold a stable support if needed']],
+boxing:[['🥊','Boxing stance','Learn a balanced, relaxed stance'],['👣','Footwork basics','Practice small, slow steps'],['👐','Guard position','Learn a safe guard with a coach'],['🥊','Shadowboxing basics','Slow, controlled movements in the air']],
+trading:[['📚','Stock market basics','Shares, exchanges and market indices'],['🕯️','Candlestick basics','Open, high, low and close'],['📐','Support and resistance','Study price levels on historical charts'],['📊','Chart patterns','Learn common patterns and their limits'],['🛡️','Risk management','Understand risk; use paper trading']],
+challenges:['Study for 20 minutes','Learn 5 English words','Take a screen break','Organize tomorrow’s tasks','Keep a consistent bedtime'].map((name,i)=>({id:i+1,name,done:false}))
+};
+let data;try{data=JSON.parse(localStorage.getItem('levelUpData'))||structuredClone(defaults)}catch(e){data=JSON.parse(JSON.stringify(defaults))}
+let selected=new Date(today),editCallback=null;
+function save(){localStorage.setItem('levelUpData',JSON.stringify(data));}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderCalendar(){
+const y=selected.getFullYear(),m=selected.getMonth(),first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate();
+$('monthName').textContent=selected.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+let out=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="weekday">${x}</div>`).join('');
+for(let i=0;i<first;i++)out+='<div></div>';
+for(let d=1;d<=last;d++){let k=`${y}-${m}-${d}`,count=data.habits.filter(h=>h.marks[k]).length;out+=`<button class="date ${d===selected.getDate()?'selected':''} ${count?'marked':''}" data-date="${d}">${d}${count?'<br>✓':''}</button>`}
+$('calendar').innerHTML=out;
+$('calendar').querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{selected=new Date(y,m,+b.dataset.date);render()});
+}
+function renderHabits(){
+const k=keyDate(selected);
+$('habits').innerHTML=data.habits.map(h=>`<div class="item"><div class="details"><b>${esc(h.name)}</b><small>${Object.keys(h.marks).filter(x=>h.marks[x]).length} total check-ins</small></div><button class="btn smallbtn ${h.marks[k]?'secondary':''}" data-check="${h.id}">${h.marks[k]?'✓ Done':'Mark done'}</button><button class="btn secondary smallbtn" data-edit="${h.id}">✎</button></div>`).join('')||'<div class="empty">Add your first habit.</div>';
+$('habits').querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>{let h=data.habits.find(x=>x.id==b.dataset.check);h.marks[k]=!h.marks[k];save();render()});
+$('habits').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{let h=data.habits.find(x=>x.id==b.dataset.edit);openModal('Edit habit',h.name,v=>{h.name=v;save();render()})});
+}
+function renderLibrary(id,arr,type){$(id).innerHTML=arr.map((x,i)=>`<div class="item"><div class="emoji">${x[0]}</div><div class="details"><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div><button class="btn secondary smallbtn" data-edit="${i}">Edit</button></div>`).join('');$(id).querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal('Edit '+type,arr[+b.dataset.edit][1],v=>{arr[+b.dataset.edit][1]=v;save();render()}))}
+function renderChallenges(){$('challengeList').innerHTML=data.challenges.map(c=>`<button class="item" data-ch="${c.id}" style="color:white;text-align:left"><span class="emoji">${c.done?'✅':'🎯'}</span><span class="details"><b>${esc(c.name)}</b><small>${c.done?'Completed':'Tap to mark complete'}</small></span></button>`).join('');$('challengeList').querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{let c=data.challenges.find(x=>x.id==b.dataset.ch);c.done=!c.done;save();render()});let n=data.challenges.filter(c=>c.done).length,p=data.challenges.length?100*n/data.challenges.length:0;$('challengeBar').style.width=p+'%';$('challengeCount').textContent=`${n} of ${data.challenges.length} challenges completed`;}
+function renderStats(){let k=keyDate(today),done=data.habits.filter(h=>h.marks[k]).length;$('statHabits').textContent=`${done}/${data.habits.length}`;$('statChallenges').textContent=`${data.challenges.filter(c=>c.done).length}/${data.challenges.length}`;$('statDays').textContent=data.habits.reduce((s,h)=>s+Object.values(h.marks).filter(Boolean).length,0)}
+function render(){renderCalendar();renderHabits();renderLibrary('fitnessList',data.fitness,'exercise');renderLibrary('boxingList',data.boxing,'lesson');renderLibrary('tradingList',data.trading,'topic');renderChallenges();renderStats();let n=data.habits.filter(h=>h.marks[keyDate(today)]).length,p=data.habits.length?Math.round(n/data.habits.length*100):0;$('percent').textContent=p+'%';$('bar').style.width=p+'%';$('progressText').textContent=`${n} of ${data.habits.length} habits completed today.`}
+function openModal(title,value,cb){$('modalTitle').textContent=title;$('modalName').value=value;$('modal').classList.add('open');editCallback=cb;$('modalName').focus()}
+function closeModal(){$('modal').classList.remove('open');editCallback=null}
+$('modalSave').onclick=()=>{let v=$('modalName').value.trim();if(v&&editCallback)editCallback(v);closeModal()};
+$('modalCancel').onclick=closeModal;
+$('addHabit').onclick=()=>openModal('Add a habit','',v=>{data.habits.push({id:Date.now(),name:v,marks:{}});save();render()});
+[['addFitness','fitness','💪','exercise'],['addBoxing','boxing','🥊','lesson'],['addTrading','trading','📈','topic']].forEach(([btn,field,emoji,type])=>$(btn).onclick=()=>openModal('Add '+type,'',v=>{data[field].push([emoji,v,'Custom '+type+' added by you']);save();render()}));
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));$(b.dataset.page).classList.add('active');b.classList.add('active')});
+$('saveSettings').onclick=()=>{localStorage.setItem('levelUpName',$('username').value);localStorage.setItem('levelUpWake',$('wake').value);alert('Settings saved on this device.')};
+$('username').value=localStorage.getItem('levelUpName')||'';$('wake').value=localStorage.getItem('levelUpWake')||'05:30';
+$('exportData').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='level-up-backup.json';a.click();URL.revokeObjectURL(a.href)};
+$('reset').onclick=()=>{if(confirm('Reset all habits and learning progress on this device?')){data=JSON.parse(JSON.stringify(defaults));save();render()}};
+render();
+</script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script></body></html>
